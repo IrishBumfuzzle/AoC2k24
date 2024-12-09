@@ -11,49 +11,49 @@ using namespace std;
 vector<int> StartNumbers;
 vector<int> EndNumbers;
 
-int correction(vector<int> &numbers){
-        int correct = 1;
+int correction(vector<int> &numbers)
+{
+    int correct = 1;
 
-        for (int i = numbers.size() - 2; i >= 0; i--)
+    for (int i = numbers.size() - 2; i >= 0; i--)
+    {
+        int break1 = 0;
+        vector<int> prev_numbers;
+
+        for (int j = 0; j < EndNumbers.size(); j++)
         {
-            int break1 = 0;
-            vector<int> prev_numbers;
-
-            for (int j = 0; j < EndNumbers.size(); j++)
+            if (StartNumbers[j] == numbers[i])
             {
-                if (StartNumbers[j] == numbers[i])
-                {
-                    prev_numbers.push_back(EndNumbers[j]);
-                }
-            }
-
-            for (int j = i + 1; j < numbers.size(); j++)
-            {
-                int found = 0;
-
-                for (auto &k : prev_numbers)
-                {
-                    if (k == numbers[j])
-                        found = 1;
-                }
-                if (!found)
-                {
-                    break1 = 1;
-                    break;
-                }
-            }
-
-            if (break1)
-            {
-                int temp = numbers[i];
-                numbers[i] = numbers[i+1];
-                numbers[i+1] = temp;
-                correction(numbers);
-                return 1;
+                prev_numbers.push_back(EndNumbers[j]);
             }
         }
-        return 0;
- 
+
+        for (int j = i + 1; j < numbers.size(); j++)
+        {
+            int found = 0;
+
+            for (auto &k : prev_numbers)
+            {
+                if (k == numbers[j])
+                    found = 1;
+            }
+            if (!found)
+            {
+                break1 = 1;
+                break;
+            }
+        }
+
+        if (break1)
+        {
+            int temp = numbers[i];
+            numbers[i] = numbers[i + 1];
+            numbers[i + 1] = temp;
+            correction(numbers);
+            return 1;
+        }
+    }
+    return 0;
 }
 
 int main()
@@ -78,8 +78,9 @@ int main()
         {
             numbers.push_back((buffer[i] - '0') * 10 + buffer[i + 1] - '0');
         }
-        if(correction(numbers)){
-            sum += numbers[numbers.size()/2];
+        if (correction(numbers))
+        {
+            sum += numbers[numbers.size() / 2];
         }
     }
 
